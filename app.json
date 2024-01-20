@@ -1,0 +1,42 @@
+{
+  "name": "modalova",
+  "environments": {
+  },
+  "stack": "heroku-22",
+  "env": {
+    "APP_DEBUG": "true",
+    "APP_ENV": "local",
+    "APP_LOG_LEVEL": "debug",
+    "CACHE_DRIVER": "memcached-memcachier",
+    "QUEUE_DRIVER": "redis"
+  },
+  "scripts": {
+    "postdeploy": "php artisan db:seed --force ; php artisan update:sources ; php artisan import:products"
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    },
+    "worker": {
+      "quantity": 0,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    "memcachier:dev",
+    "rediscloud:30",
+    "scheduler:standard",
+    {
+      "plan": "cleardb:punch",
+      "as": "DATABASE",
+      "options": {
+        "version": 5.7
+      }
+    }
+  ],
+  "buildpacks": [
+    { "url": "heroku/nodejs" },
+    { "url": "heroku/php" }
+  ]
+}
